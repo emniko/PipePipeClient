@@ -1279,6 +1279,11 @@ Only add repositories you trust.</string>
 <string name="invalid_settings_file">Not a valid settings file</string>
     <!-- YouTube-style UI -->
     <string name="yt_more_actions">More actions</string>
+    <string name="yt_open_menu">Menu</string>
+    <string name="yt_tab_home">Home</string>
+    <string name="yt_tab_subscriptions">Subscriptions</string>
+    <string name="yt_tab_channels">Channels</string>
+    <string name="yt_tab_library">Library</string>
     <string name="yt_comments_teaser_title">Comments</string>
     <string name="yt_comments_teaser_hint">Tap to read comments</string>
 </resources>

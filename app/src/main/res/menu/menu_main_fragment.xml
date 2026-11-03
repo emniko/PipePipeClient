@@ -8,4 +8,11 @@
         android:orderInCategory="1"
         android:title="@string/search"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_open_drawer"
+        android:icon="@drawable/ic_account"
+        android:orderInCategory="2"
+        android:title="@string/yt_open_menu"
+        app:showAsAction="always" />
 </menu>

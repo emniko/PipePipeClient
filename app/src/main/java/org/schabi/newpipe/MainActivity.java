@@ -266,11 +266,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /** Opens the navigation drawer (services, downloads, history, settings). */
+    public void openDrawer() {
+        mainBinding.getRoot().open();
+    }
+
     private void setupDrawer() throws ExtractionException {
         addDrawerMenuForCurrentService();
 
         toggle = new ActionBarDrawerToggle(this, mainBinding.getRoot(),
                 toolbarLayoutBinding.toolbar, R.string.drawer_open, R.string.drawer_close);
+        // YouTube-style top bar: no hamburger, the drawer opens from the account icon
+        toggle.setDrawerIndicatorEnabled(false);
         toggle.syncState();
         mainBinding.getRoot().addDrawerListener(toggle);
         mainBinding.getRoot().addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -822,11 +829,12 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             if (toggle != null) {
                 toggle.syncState();
-                toolbarLayoutBinding.toolbar.setNavigationOnClickListener(v -> mainBinding.getRoot()
-                        .open());
                 mainBinding.getRoot().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED);
             }
+            toolbarLayoutBinding.toolbar.setNavigationIcon(null);
+            toolbarLayoutBinding.toolbar.setLogo(R.drawable.yt_app_logo);
         } else {
+            toolbarLayoutBinding.toolbar.setLogo(null);
             mainBinding.getRoot().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbarLayoutBinding.toolbar.setNavigationOnClickListener(v -> onHomeButtonPressed());

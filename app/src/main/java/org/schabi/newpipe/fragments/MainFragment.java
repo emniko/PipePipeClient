@@ -34,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import org.schabi.newpipe.BaseFragment;
+import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.databinding.FragmentMainBinding;
 import org.schabi.newpipe.error.ErrorUtil;
@@ -179,6 +180,11 @@ public class MainFragment extends BaseFragment
                 ErrorUtil.showUiErrorSnackbar(this, "Opening search fragment", e);
             }
             return true;
+        } else if (item.getItemId() == R.id.action_open_drawer) {
+            if (activity instanceof MainActivity) {
+                ((MainActivity) activity).openDrawer();
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -211,8 +217,10 @@ public class MainFragment extends BaseFragment
             final TabLayout.Tab tabToSet = binding.mainTabLayout.getTabAt(i);
             if (tabToSet != null) {
                 final Tab tab = tabsList.get(i);
-                final String tabName = tab.getTabName(requireContext());
-                tabToSet.setIcon(tab.getTabIconRes(requireContext()));
+                final String tabName = mainTabsPositionBottom
+                        ? bottomNavLabel(tab) : tab.getTabName(requireContext());
+                tabToSet.setIcon(mainTabsPositionBottom
+                        ? bottomNavIcon(tab) : tab.getTabIconRes(requireContext()));
                 tabToSet.setContentDescription(tabName);
                 if (mainTabsPositionBottom) {
                     // YouTube-style bottom navigation: icon with a small label underneath
@@ -226,6 +234,34 @@ public class MainFragment extends BaseFragment
                 }
             }
         }
+    }
+
+    /** YouTube-style names for the standard tabs in the bottom bar. */
+    private String bottomNavLabel(final Tab tab) {
+        if (tab instanceof Tab.DefaultKioskTab) {
+            return getString(R.string.yt_tab_home);
+        } else if (tab instanceof Tab.FeedTab) {
+            return getString(R.string.yt_tab_subscriptions);
+        } else if (tab instanceof Tab.SubscriptionsTab) {
+            return getString(R.string.yt_tab_channels);
+        } else if (tab instanceof Tab.BookmarksTab) {
+            return getString(R.string.yt_tab_library);
+        }
+        return tab.getTabName(requireContext());
+    }
+
+    /** YouTube-style icons for the standard tabs in the bottom bar. */
+    private int bottomNavIcon(final Tab tab) {
+        if (tab instanceof Tab.DefaultKioskTab) {
+            return R.drawable.ic_home;
+        } else if (tab instanceof Tab.FeedTab) {
+            return R.drawable.ic_subscriptions;
+        } else if (tab instanceof Tab.SubscriptionsTab) {
+            return R.drawable.ic_account;
+        } else if (tab instanceof Tab.BookmarksTab) {
+            return R.drawable.ic_yt_library;
+        }
+        return tab.getTabIconRes(requireContext());
     }
 
     private void updateTitleForTab(final int tabPosition) {

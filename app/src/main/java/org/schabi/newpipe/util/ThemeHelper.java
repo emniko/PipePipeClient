@@ -395,7 +395,10 @@ public final class ThemeHelper {
         if (preferences.getBoolean(context.getString(R.string.card_mode_enabled_key), false)) {
             return ItemViewMode.CARD;
         }
-        return shouldUseGridLayout(context) ? ItemViewMode.GRID : ItemViewMode.CARD;
+        // like YouTube: one card per row on phones, a grid only when there is room (tablets,
+        // landscape) and the grid setting is on
+        final boolean wideScreen = context.getResources().getConfiguration().screenWidthDp >= 600;
+        return wideScreen && shouldUseGridLayout(context) ? ItemViewMode.GRID : ItemViewMode.CARD;
     }
 
     /**

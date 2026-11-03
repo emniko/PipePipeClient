@@ -7,5 +7,5 @@
         android:icon="@drawable/ic_filter_alt"
         android:orderInCategory="3"
         android:title="@string/search_in_page"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 </menu>
