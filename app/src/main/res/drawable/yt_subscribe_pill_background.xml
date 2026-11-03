@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- High-contrast pill for the Subscribe button -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/yt_chip_pressed">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <solid android:color="@color/subscribe_background_color" />
+        </shape>
+    </item>
+</ripple>

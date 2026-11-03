@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon and label color of the YouTube-style bottom navigation -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/yt_on_surface" android:state_selected="true" />
+    <item android:color="@color/yt_secondary_text" />
+</selector>

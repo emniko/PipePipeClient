@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Follows service's primary color -->
+    <!-- YouTube-style high-contrast pill (dark on light theme, light on dark theme) -->
     <style name="ServiceColoredButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">?attr/colorPrimary</item>
+        <item name="colorButtonNormal">@color/subscribe_background_color</item>
         <item name="android:textColor">@color/subscribe_text_color</item>
-        <item name="colorControlHighlight">@color/dark_ripple_color</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="colorControlHighlight">@color/yt_chip_pressed</item>
     </style>
 
 
     <!--File picker styles-->
     <style name="FilePickerThemeLight" parent="NNF_BaseTheme.Light">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_dark_color</item>
+        <item name="colorPrimary">@color/yt_light_surface</item>
+        <item name="colorPrimaryDark">@color/yt_light_surface</item>
         <item name="colorAccent">@color/light_settings_accent_color</item>
 
         <item name="actionColor">@color/white</item>
@@ -25,8 +26,8 @@
     </style>
 
     <style name="FilePickerThemeDark" parent="NNF_BaseTheme">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/dark_youtube_dark_color</item>
+        <item name="colorPrimary">@color/yt_dark_surface</item>
+        <item name="colorPrimaryDark">@color/yt_dark_surface</item>
         <item name="colorAccent">@color/dark_settings_accent_color</item>
 
         <item name="actionColor">@color/white</item>
@@ -39,14 +40,14 @@
     </style>
 
     <style name="FilePickerAlertDialogThemeLight" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_dark_color</item>
+        <item name="colorPrimary">@color/yt_light_surface</item>
+        <item name="colorPrimaryDark">@color/yt_light_surface</item>
         <item name="colorAccent">@color/light_settings_accent_color</item>
     </style>
 
     <style name="FilePickerAlertDialogThemeDark" parent="Theme.AppCompat.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/dark_youtube_dark_color</item>
+        <item name="colorPrimary">@color/yt_dark_surface</item>
+        <item name="colorPrimaryDark">@color/yt_dark_surface</item>
         <item name="colorAccent">@color/dark_settings_accent_color</item>
     </style>
 
@@ -63,17 +64,22 @@
     </style>
 
     <style name="FloatingActionButtonTheme" parent="Widget.Design.FloatingActionButton">
-        <item name="tint">?attr/actionColor</item>
+        <item name="tint">@color/subscribe_text_color</item>
+        <item name="backgroundTint">@color/subscribe_background_color</item>
     </style>
 
     <style name="DarkPopupMenu" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!-- Toolbars sit on the plain surface color (YouTube style), so tint with the
+         theme's contrast color instead of always-white -->
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.DayNight.ActionBar</item>
-        <item name="android:textColorPrimary">?attr/actionColor</item>
-        <item name="android:textColorSecondary">?attr/actionColor</item>
-        <item name="tint">?attr/actionColor</item>
-        <item name="iconTint">?attr/actionColor</item>
+        <item name="android:textColorPrimary">@color/yt_on_surface</item>
+        <item name="android:textColorSecondary">@color/yt_secondary_text</item>
+        <item name="colorControlNormal">@color/yt_on_surface</item>
+        <item name="tint">@color/yt_on_surface</item>
+        <item name="iconTint">@color/yt_on_surface</item>
+        <item name="toolbarSearchColor">@color/yt_on_surface</item>
     </style>
     <style name="ContrastToolbarTheme" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.DayNight.ActionBar</item>
@@ -107,6 +113,33 @@
     <style name="RoundedThumbnailImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- YouTube-style UI -->
+    <style name="YtToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Rounded action button in the horizontal row under a video (Share, Download, ...) -->
+    <style name="YtActionPill">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:background">@drawable/yt_pill_background</item>
+        <item name="android:foreground">?attr/focused_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/yt_on_surface</item>
+        <item name="android:maxLines">1</item>
+        <item name="drawableTint">@color/yt_on_surface</item>
     </style>
 
 </resources>

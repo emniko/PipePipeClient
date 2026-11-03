@@ -390,10 +390,12 @@ public final class ThemeHelper {
      */
     public static ItemViewMode getItemViewMode(final Context context) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        // YouTube-style UI: full-width cards replace the compact list; the grid stays available
+        // for tablets/landscape through the grid layout setting
         if (preferences.getBoolean(context.getString(R.string.card_mode_enabled_key), false)) {
             return ItemViewMode.CARD;
         }
-        return shouldUseGridLayout(context) ? ItemViewMode.GRID : ItemViewMode.LIST;
+        return shouldUseGridLayout(context) ? ItemViewMode.GRID : ItemViewMode.CARD;
     }
 
     /**

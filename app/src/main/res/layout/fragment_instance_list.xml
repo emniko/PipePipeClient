@@ -43,7 +43,8 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="?attr/colorPrimary"
+        app:backgroundTint="@color/subscribe_background_color"
+        app:tint="@color/subscribe_text_color"
         app:fabSize="auto"
         app:srcCompat="@drawable/ic_add" />
 

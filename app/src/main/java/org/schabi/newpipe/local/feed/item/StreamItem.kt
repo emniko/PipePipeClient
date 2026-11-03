@@ -9,6 +9,7 @@ import androidx.preference.PreferenceManager
 import com.xwray.groupie.viewbinding.BindableItem
 import org.schabi.newpipe.MainActivity
 import org.schabi.newpipe.R
+import org.schabi.newpipe.info_list.YtCardUi
 import org.schabi.newpipe.database.stream.StreamWithState
 import org.schabi.newpipe.database.stream.model.StreamEntity
 import org.schabi.newpipe.databinding.ListStreamItemBinding
@@ -59,8 +60,15 @@ data class StreamItem(
 
     override fun bind(viewBinding: ListStreamItemBinding, position: Int, payloads: MutableList<Any>) {
         if (payloads.contains(UPDATE_RELATIVE_TIME)) {
+            if (itemVersion == ItemVersion.CARD) {
+                // the card shows uploader and details merged in one line, rebuild it
+                viewBinding.itemUploaderView.text = stream.uploader
+            }
             viewBinding.itemAdditionalDetails.text =
                 getStreamInfoDetailLine(viewBinding.itemAdditionalDetails.context)
+            if (itemVersion == ItemVersion.CARD) {
+                YtCardUi.mergeMetaLine(viewBinding.root)
+            }
             return
         }
 
@@ -144,6 +152,15 @@ data class StreamItem(
 
         viewBinding.itemAdditionalDetails.text =
             getStreamInfoDetailLine(viewBinding.itemAdditionalDetails.context)
+
+        if (itemVersion == ItemVersion.CARD) {
+            YtCardUi.applyCardStyle(viewBinding.root)
+            val root = viewBinding.root
+            root.findViewById<View>(R.id.itemMoreButton)?.apply {
+                visibility = if (root.isLongClickable) View.VISIBLE else View.GONE
+                setOnClickListener { root.performLongClick() }
+            }
+        }
 
         execBindEnd?.accept(viewBinding)
         bindSelection(viewBinding)

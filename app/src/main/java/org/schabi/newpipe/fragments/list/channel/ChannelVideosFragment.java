@@ -62,7 +62,6 @@ import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PicassoHelper;
 import org.schabi.newpipe.util.ServiceHelper;
-import org.schabi.newpipe.util.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -391,8 +390,8 @@ public class ChannelVideosFragment extends BaseListInfoFragment<StreamInfoItem, 
         final int backgroundDuration = isButtonVisible ? 300 : 0;
         final int textDuration = isButtonVisible ? 200 : 0;
 
-        final int subscribeBackground = ThemeHelper
-                .resolveColorFromAttr(activity, R.attr.colorPrimary);
+        final int subscribeBackground = ContextCompat
+                .getColor(activity, R.color.subscribe_background_color);
         final int subscribeText = ContextCompat.getColor(activity, R.color.subscribe_text_color);
         final int subscribedBackground = ContextCompat
                 .getColor(activity, R.color.subscribed_background_color);

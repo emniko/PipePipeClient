@@ -13,7 +13,8 @@
         android:background="?attr/colorPrimary"
         android:gravity="center_vertical"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ToolbarTheme">
+        android:theme="@style/ToolbarTheme"
+        app:titleTextAppearance="@style/YtToolbarTitle">
 
         <include
             android:id="@+id/toolbar_search_container"

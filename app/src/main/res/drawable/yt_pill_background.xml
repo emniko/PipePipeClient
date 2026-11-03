@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rounded grey pill used for YouTube-style chips, action buttons and the search field -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/yt_chip_pressed">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <solid android:color="@color/yt_chip_background" />
+        </shape>
+    </item>
+</ripple>

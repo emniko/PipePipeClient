@@ -1277,4 +1277,8 @@ Only add repositories you trust.</string>
 <string name="reset_settings_summary">Restore all settings to default. History and subscriptions are untouched.</string>
 <string name="reset_settings_confirmation">All settings will be restored to default and the app will restart. Continue?</string>
 <string name="invalid_settings_file">Not a valid settings file</string>
+    <!-- YouTube-style UI -->
+    <string name="yt_more_actions">More actions</string>
+    <string name="yt_comments_teaser_title">Comments</string>
+    <string name="yt_comments_teaser_hint">Tap to read comments</string>
 </resources>

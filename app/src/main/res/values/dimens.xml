@@ -149,4 +149,8 @@
     <dimen name="video_item_detail_thumbnail_min_height">200dp</dimen>
     <dimen name="video_item_detail_uploader_text_margin">8dp</dimen>
     <dimen name="mini_player_thumbnail_width">62dp</dimen>
+    <!-- YouTube-style UI -->
+    <dimen name="yt_bottom_nav_height">56dp</dimen>
+    <dimen name="yt_feed_avatar_size">36dp</dimen>
+    <dimen name="yt_channel_avatar_size">40dp</dimen>
 </resources>

@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapterMenuWorkaround;
@@ -86,7 +87,7 @@ public class MainFragment extends BaseFragment
 
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         mainTabsPositionKey = getString(R.string.main_tabs_position_key);
-        mainTabsPositionBottom = prefs.getBoolean(mainTabsPositionKey, false);
+        mainTabsPositionBottom = prefs.getBoolean(mainTabsPositionKey, true);
 
     }
 
@@ -129,7 +130,7 @@ public class MainFragment extends BaseFragment
             setupTabs();
         }
 
-        final boolean newMainTabsPosition = prefs.getBoolean(mainTabsPositionKey, false);
+        final boolean newMainTabsPosition = prefs.getBoolean(mainTabsPositionKey, true);
         if (mainTabsPositionBottom != newMainTabsPosition) {
             mainTabsPositionBottom = newMainTabsPosition;
             updateTabLayoutPosition();
@@ -210,14 +211,31 @@ public class MainFragment extends BaseFragment
             final TabLayout.Tab tabToSet = binding.mainTabLayout.getTabAt(i);
             if (tabToSet != null) {
                 final Tab tab = tabsList.get(i);
+                final String tabName = tab.getTabName(requireContext());
                 tabToSet.setIcon(tab.getTabIconRes(requireContext()));
-                tabToSet.setContentDescription(tab.getTabName(requireContext()));
+                tabToSet.setContentDescription(tabName);
+                if (mainTabsPositionBottom) {
+                    // YouTube-style bottom navigation: icon with a small label underneath
+                    if (tabToSet.getCustomView() == null) {
+                        tabToSet.setCustomView(R.layout.yt_bottom_nav_item);
+                    }
+                    tabToSet.setText(tabName);
+                } else {
+                    tabToSet.setCustomView(null);
+                    tabToSet.setText(null);
+                }
             }
         }
     }
 
     private void updateTitleForTab(final int tabPosition) {
-        setTitle(tabsList.get(tabPosition).getTabName(requireContext()));
+        if (mainTabsPositionBottom) {
+            // the bottom bar already labels every tab, so the top bar shows the app name
+            // like YouTube shows its logo
+            setTitle(getString(R.string.app_name));
+        } else {
+            setTitle(tabsList.get(tabPosition).getTabName(requireContext()));
+        }
     }
 
     private void updateTabLayoutPosition() {
@@ -237,18 +255,29 @@ public class MainFragment extends BaseFragment
         tabLayout.setSelectedTabIndicatorGravity(
                 bottom ? INDICATOR_GRAVITY_TOP : INDICATOR_GRAVITY_BOTTOM);
 
+        tabParams.height = bottom
+                ? getResources().getDimensionPixelSize(R.dimen.yt_bottom_nav_height)
+                : RelativeLayout.LayoutParams.WRAP_CONTENT;
         tabLayout.setLayoutParams(tabParams);
         viewPager.setLayoutParams(pagerParams);
 
-        tabLayout.setBackgroundColor(ThemeHelper.resolveColorFromAttr(requireContext(),
-                bottom ? android.R.attr.windowBackground : R.attr.colorPrimary));
+        final int onSurface = ContextCompat.getColor(requireContext(), R.color.yt_on_surface);
+        tabLayout.setTabRippleColor(ColorStateList.valueOf(onSurface).withAlpha(32));
+        if (bottom) {
+            tabLayout.setBackgroundResource(R.drawable.yt_bottom_nav_background);
+            tabLayout.setTabIconTint(
+                    ContextCompat.getColorStateList(requireContext(), R.color.yt_bottom_nav_item));
+            tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
+        } else {
+            tabLayout.setBackgroundColor(ThemeHelper.resolveColorFromAttr(requireContext(),
+                    R.attr.colorPrimary));
+            tabLayout.setTabIconTint(ColorStateList.valueOf(onSurface));
+            tabLayout.setSelectedTabIndicatorColor(onSurface);
+        }
 
-        final int iconColor = bottom
-                ? ThemeHelper.resolveColorFromAttr(requireContext(), android.R.attr.colorAccent)
-                : Color.WHITE;
-        tabLayout.setTabRippleColor(ColorStateList.valueOf(iconColor).withAlpha(32));
-        tabLayout.setTabIconTint(ColorStateList.valueOf(iconColor));
-        tabLayout.setSelectedTabIndicatorColor(iconColor);
+        // labels and title depend on the position
+        updateTabsIconAndDescription();
+        updateTitleForTab(viewPager.getCurrentItem());
     }
 
     @Override

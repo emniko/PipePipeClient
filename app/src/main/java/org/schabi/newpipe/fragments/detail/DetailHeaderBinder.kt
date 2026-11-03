@@ -35,6 +35,11 @@ import java.util.concurrent.TimeUnit
 /** Tag of the images loaded for the detail page, to cancel them when another stream loads. */
 internal const val PICASSO_VIDEO_DETAILS_TAG = "PICASSO_VIDEO_DETAILS_TAG"
 
+/** Lines of the title while collapsed and expanded (YouTube shows two by default). */
+private const val COLLAPSED_TITLE_LINES = 2
+private const val EXPANDED_TITLE_LINES = 10
+private const val YT_SEPARATOR = " · "
+
 /**
  * The top part of the detail page: thumbnail, title, uploader, counts, the controls' visibility
  * and the playback position.
@@ -51,6 +56,7 @@ class DetailHeaderBinder(
     private val context: Context get() = fragment.requireContext()
     private val disposables = CompositeDisposable()
     private var positionSubscriber: Disposable? = null
+    private val subscribeButton = DetailSubscribeButton(content.detailSubscribeButton)
 
     /** URL of the stream shown, null while loading. */
     var shownUrl: String? = null
@@ -70,8 +76,9 @@ class DetailHeaderBinder(
         val ellipsize = PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean(context.getString(R.string.auto_ellipsize_key), false)
         content.detailVideoTitleView.text = title
-        content.detailVideoTitleView.maxLines = if (ellipsize) 1 else 10
+        content.detailVideoTitleView.maxLines = if (ellipsize) 1 else COLLAPSED_TITLE_LINES
         content.detailVideoTitleView.animate(true, 0)
+        subscribeButton.hide()
 
         content.detailToggleSecondaryControlsView.visibility = View.GONE
         content.detailTitleRootLayout.isClickable = false
@@ -94,7 +101,9 @@ class DetailHeaderBinder(
         content.detailTitleRootLayout.isClickable = true
         content.detailToggleSecondaryControlsView.rotation = 0f
         content.detailToggleSecondaryControlsView.visibility = View.VISIBLE
-        content.detailSecondaryControlPanel.visibility = View.GONE
+        // YouTube-style: all actions live in one scrolling row, nothing is folded away
+        content.detailSecondaryControlPanel.visibility = View.VISIBLE
+        subscribeButton.bind(info)
 
         updateProgressInfo(info, playQueue)
         loadImages(info)
@@ -158,20 +167,20 @@ class DetailHeaderBinder(
         }
     }
 
-    /** Expands the title and shows the secondary controls, or the other way around. */
+    /** Expands the title to its full length, or collapses it back to two lines. */
     fun toggleTitleAndSecondaryControls() {
-        val expand = content.detailSecondaryControlPanel.visibility == View.GONE
-        content.detailVideoTitleView.maxLines = if (expand) 10 else 1
+        val expand = content.detailVideoTitleView.maxLines <= COLLAPSED_TITLE_LINES
+        content.detailVideoTitleView.maxLines =
+            if (expand) EXPANDED_TITLE_LINES else COLLAPSED_TITLE_LINES
         content.detailToggleSecondaryControlsView.animateRotation(
             Player.DEFAULT_CONTROLS_DURATION.toLong(), if (expand) 180 else 0)
-        content.detailSecondaryControlPanel.visibility = if (expand) View.VISIBLE else View.GONE
         onHeightChanged()
     }
 
     /** Hides everything below the title, or shows it again. */
     fun toggleDetails() {
         if (content.detailContentRootHiding.visibility == View.GONE) {
-            content.detailVideoTitleView.maxLines = 10
+            content.detailVideoTitleView.maxLines = EXPANDED_TITLE_LINES
             content.detailToggleSecondaryControlsView.animateRotation(
                 Player.DEFAULT_CONTROLS_DURATION.toLong(), 180)
             content.detailContentRootHiding.visibility = View.VISIBLE
@@ -186,6 +195,7 @@ class DetailHeaderBinder(
         positionSubscriber?.dispose()
         positionSubscriber = null
         disposables.clear()
+        subscribeButton.release()
     }
 
     private fun bindUploader(info: StreamInfo) {
@@ -240,19 +250,39 @@ class DetailHeaderBinder(
     }
 
     private fun bindCounts(info: StreamInfo) {
-        if (info.viewCount >= 0) {
-            content.detailViewCountView.text = when (info.streamType) {
+        bindViewsAndDate(info)
+        bindLikes(info)
+        // the like | dislike pill only shows what is available
+        content.detailThumbsDivider.visibility =
+            if (content.detailThumbsUpImgView.visibility == View.VISIBLE
+                && content.detailThumbsDownImgView.visibility == View.VISIBLE) View.VISIBLE
+            else View.GONE
+        content.detailsPanel.visibility =
+            if (content.detailThumbsUpImgView.visibility == View.VISIBLE
+                || content.detailThumbsDownImgView.visibility == View.VISIBLE) View.VISIBLE
+            else View.GONE
+    }
+
+    /** "1.2M views · 3 days ago" under the title, like YouTube. */
+    private fun bindViewsAndDate(info: StreamInfo) {
+        val views = if (info.viewCount >= 0) {
+            when (info.streamType) {
                 StreamType.AUDIO_LIVE_STREAM ->
                     Localization.listeningCount(context, info.viewCount)
                 StreamType.LIVE_STREAM ->
-                    Localization.localizeWatchingCount(context, info.viewCount)
-                else -> Localization.localizeViewCount(context, info.viewCount)
+                    Localization.shortWatchingCount(context, info.viewCount)
+                else -> Localization.shortViewCount(context, info.viewCount)
             }
-            content.detailViewCountView.visibility = View.VISIBLE
-        } else {
-            content.detailViewCountView.visibility = View.GONE
-        }
+        } else null
+        val date = info.uploadDate?.let { Localization.relativeTime(it.offsetDateTime()) }
+            ?: info.textualUploadDate
+        val line = listOfNotNull(views, date?.takeIf { it.isNotEmpty() })
+            .joinToString(YT_SEPARATOR)
+        content.detailViewCountView.text = line
+        content.detailViewCountView.visibility = if (line.isEmpty()) View.GONE else View.VISIBLE
+    }
 
+    private fun bindLikes(info: StreamInfo) {
         if (info.dislikeCount == -1L && info.likeCount == -1L) {
             content.detailThumbsDownImgView.visibility = View.VISIBLE
             content.detailThumbsUpImgView.visibility = View.VISIBLE

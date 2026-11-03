@@ -247,8 +247,13 @@ class DetailPlayerViewHost(
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT
         }
+        // Toolbars and the status bar use the plain surface color now, so keep dark
+        // status bar icons on the light theme instead of resetting every flag
         @Suppress("DEPRECATION")
-        window.decorView.systemUiVisibility = 0
+        window.decorView.systemUiVisibility =
+            if (ThemeHelper.isLightThemeSelected(fragment.requireContext()))
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            else 0
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.statusBarColor = ThemeHelper.resolveColorFromAttr(
             fragment.requireContext(), android.R.attr.colorPrimary)

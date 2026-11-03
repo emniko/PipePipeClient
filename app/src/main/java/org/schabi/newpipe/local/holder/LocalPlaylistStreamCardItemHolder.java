@@ -4,7 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.database.LocalItem;
+import org.schabi.newpipe.info_list.YtCardUi;
 import org.schabi.newpipe.local.LocalItemBuilder;
+import org.schabi.newpipe.local.history.HistoryRecordManager;
+
+import java.time.format.DateTimeFormatter;
 
 public class LocalPlaylistStreamCardItemHolder extends LocalPlaylistStreamItemHolder {
 
@@ -16,5 +21,13 @@ public class LocalPlaylistStreamCardItemHolder extends LocalPlaylistStreamItemHo
         if (handle != null) {
             handle.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void updateFromItem(final LocalItem localItem,
+                               final HistoryRecordManager historyRecordManager,
+                               final DateTimeFormatter dateTimeFormatter) {
+        super.updateFromItem(localItem, historyRecordManager, dateTimeFormatter);
+        YtCardUi.applyCardStyle(itemView);
     }
 }

@@ -2,4 +2,16 @@
 <resources>
     <color name="contrastColor">@color/white</color>
     <color name="defaultIconTint">@color/white</color>
+
+    <!-- YouTube-style palette, dark values -->
+    <color name="yt_on_surface">#F1F1F1</color>
+    <color name="yt_secondary_text">#AAAAAA</color>
+    <color name="yt_chip_background">#1AFFFFFF</color>
+    <color name="yt_chip_pressed">#33FFFFFF</color>
+    <color name="yt_divider">#33FFFFFF</color>
+    <color name="yt_link">@color/yt_dark_blue</color>
+    <color name="yt_nav_inactive">#F1F1F1</color>
+
+    <color name="subscribe_background_color">#F1F1F1</color>
+    <color name="subscribe_text_color">#0F0F0F</color>
 </resources>

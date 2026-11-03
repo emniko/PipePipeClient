@@ -15,17 +15,20 @@
     <style name="Base.V19" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="actionColor">@color/white</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
-        <item name="toolbarSearchColor">@color/white</item>
-        <item name="colorControlActivated">?attr/colorPrimary</item>
+        <item name="toolbarSearchColor">@color/contrastColor</item>
     </style>
     <style name="Base" parent="Base.V19"/>
 
     <!-- Light Theme -->
     <style name="Base.V19.LightTheme" parent="Base">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_primary_color</item>
+        <item name="colorPrimary">@color/yt_light_surface</item>
+        <item name="colorPrimaryDark">@color/yt_light_surface</item>
         <item name="colorAccent">@color/light_youtube_accent_color</item>
-        <item name="colorOnSurface">@color/black</item>
+        <item name="colorControlActivated">@color/yt_light_blue</item>
+        <item name="colorOnSurface">@color/yt_on_surface</item>
+        <item name="android:textColorPrimary">@color/yt_on_surface</item>
+        <item name="android:textColorSecondary">@color/yt_secondary_text</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/light_background_color</item>
         <item name="windowBackground">@color/light_background_color</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme.Light.Base</item>
@@ -34,7 +37,7 @@
         <item name="contrast_background_color">@color/light_contrast_background_color</item>
         <item name="checked_selector">@drawable/selector_checked_light</item>
         <item name="focused_selector">@drawable/selector_focused_light</item>
-        <item name="toolbar_shadow">@drawable/toolbar_shadow_light</item>
+        <item name="toolbar_shadow">@android:color/transparent</item>
         <item name="selector">@drawable/selector_light</item>
         <item name="colorControlHighlight">@color/light_ripple_color</item>
         <item name="progress_horizontal_drawable">@drawable/progress_youtube_horizontal_light_rounded</item>
@@ -49,13 +52,15 @@
 
     <!-- Dark Theme -->
     <style name="Base.V19.DarkTheme" parent="Base">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/dark_youtube_primary_color</item>
+        <item name="colorPrimary">@color/yt_dark_surface</item>
+        <item name="colorPrimaryDark">@color/yt_dark_surface</item>
         <item name="colorAccent">@color/dark_youtube_accent_color</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white_secondary</item>
-        <item name="android:textColorTertiary">@color/white_secondary</item>
+        <item name="colorControlActivated">@color/yt_dark_blue</item>
+        <item name="colorOnSurface">@color/yt_on_surface</item>
+        <item name="android:textColorPrimary">@color/yt_on_surface</item>
+        <item name="android:textColorSecondary">@color/yt_secondary_text</item>
+        <item name="android:textColorTertiary">@color/yt_secondary_text</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@color/dark_background_color</item>
         <item name="windowBackground">@color/dark_background_color</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme.Dark.Base</item>
@@ -64,7 +69,7 @@
         <item name="contrast_background_color">@color/dark_contrast_background_color</item>
         <item name="checked_selector">@drawable/selector_checked_dark</item>
         <item name="focused_selector">@drawable/selector_focused_dark</item>
-        <item name="toolbar_shadow">@drawable/toolbar_shadow_dark</item>
+        <item name="toolbar_shadow">@android:color/transparent</item>
         <item name="selector">@drawable/selector_dark</item>
         <item name="colorControlHighlight">@color/dark_ripple_color</item>
         <item name="progress_horizontal_drawable">@drawable/progress_youtube_horizontal_dark_rounded</item>
@@ -79,6 +84,8 @@
 
     <!-- Black Theme -->
     <style name="Base.V19.BlackTheme" parent="DarkTheme">
+        <item name="colorPrimary">@color/yt_black_surface</item>
+        <item name="colorPrimaryDark">@color/yt_black_surface</item>
         <item name="android:windowBackground">@color/black_background_color</item>
         <item name="windowBackground">@color/black_background_color</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme.Black</item>
@@ -96,33 +103,33 @@
 
     <!-- Dialogs -->
     <style name="LightDialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_primary_color</item>
-        <item name="colorAccent">@color/light_youtube_accent_color</item>
+        <item name="colorPrimary">@color/yt_light_surface</item>
+        <item name="colorPrimaryDark">@color/yt_light_surface</item>
+        <item name="colorAccent">@color/yt_light_blue</item>
         <item name="android:windowBackground">@color/light_dialog_background_color</item>
         <item name="windowBackground">@color/light_dialog_background_color</item>
     </style>
 
     <style name="DarkDialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/dark_youtube_primary_color</item>
-        <item name="colorAccent">@color/dark_youtube_accent_color</item>
+        <item name="colorPrimary">@color/yt_dark_surface</item>
+        <item name="colorPrimaryDark">@color/yt_dark_surface</item>
+        <item name="colorAccent">@color/yt_dark_blue</item>
         <item name="android:windowBackground">@color/dark_dialog_background_color</item>
         <item name="windowBackground">@color/dark_dialog_background_color</item>
     </style>
 
     <style name="LightDialogMinWidthTheme" parent="Theme.AppCompat.DayNight.Dialog.MinWidth">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_primary_color</item>
-        <item name="colorAccent">@color/light_youtube_accent_color</item>
+        <item name="colorPrimary">@color/yt_light_surface</item>
+        <item name="colorPrimaryDark">@color/yt_light_surface</item>
+        <item name="colorAccent">@color/yt_light_blue</item>
         <item name="android:windowBackground">@color/light_dialog_background_color</item>
         <item name="windowBackground">@color/light_dialog_background_color</item>
     </style>
 
     <style name="DarkDialogMinWidthTheme" parent="Theme.AppCompat.DayNight.Dialog.MinWidth">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/dark_youtube_primary_color</item>
-        <item name="colorAccent">@color/dark_youtube_accent_color</item>
+        <item name="colorPrimary">@color/yt_dark_surface</item>
+        <item name="colorPrimaryDark">@color/yt_dark_surface</item>
+        <item name="colorAccent">@color/yt_dark_blue</item>
         <item name="android:windowBackground">@color/dark_dialog_background_color</item>
         <item name="windowBackground">@color/dark_dialog_background_color</item>
     </style>

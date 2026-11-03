@@ -1,113 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube-style feed card: full-width thumbnail, then channel avatar, title, a single
+     "Channel · views · time" line and an overflow button. -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/channel_item_grid_padding"
-    android:paddingBottom="@dimen/channel_item_grid_padding"
+    android:paddingBottom="20dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/itemThumbnailView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder_thumbnail_video"
-        app:shapeAppearance="@style/RoundedThumbnailImageView"
-        app:layout_constraintBottom_toTopOf="@+id/itemProgressView"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <org.schabi.newpipe.views.NewPipeTextView
         android:id="@+id/itemDurationView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/video_item_search_duration_margin"
-        android:layout_marginBottom="@dimen/video_item_search_duration_margin"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/duration_background_color"
-        android:paddingHorizontal="@dimen/video_item_search_duration_horizontal_padding"
-        android:paddingVertical="@dimen/video_item_search_duration_vertical_padding"
-        android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="1dp"
         android:textColor="@color/duration_text_color"
-        android:textSize="@dimen/video_item_search_duration_text_size"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/itemThumbnailView"
-        app:layout_constraintRight_toRightOf="@id/itemThumbnailView"
-        tools:text="1:09:10" />
-
-    <org.schabi.newpipe.views.NewPipeTextView
-        android:id="@+id/itemVideoTitleView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_small"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:layout_marginTop="@dimen/margin_small"
-        android:textAppearance="?textAppearanceListItem"
         app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
-        app:layout_constraintStart_toStartOf="@id/itemThumbnailView"
-        app:layout_constraintTop_toBottomOf="@id/itemThumbnailView"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique vitae sem vitae blanditLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum" />
-
-    <org.schabi.newpipe.views.NewPipeTextView
-        android:id="@+id/itemUploaderView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_micro"
-        android:layout_marginEnd="@dimen/margin_small"
-        android:ellipsize="end"
-        android:lines="1"
-        android:includeFontPadding="false"
-        android:textAppearance="?android:textAppearanceSmall"
-        app:layout_constraintEnd_toStartOf="@id/itemAdditionalDetails"
-        app:layout_constraintStart_toStartOf="@id/itemVideoTitleView"
-        app:layout_constraintTop_toBottomOf="@+id/itemVideoTitleView"
-        tools:text="Uploader" />
-
-    <org.schabi.newpipe.views.NewPipeTextView
-        android:id="@+id/itemAdditionalDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:lines="1"
-        android:includeFontPadding="false"
-        android:textAppearance="?android:textAppearanceSmall"
-        app:layout_constraintBottom_toBottomOf="@id/itemUploaderView"
-        app:layout_constraintEnd_toEndOf="@+id/itemVideoTitleView"
-        app:layout_constraintStart_toEndOf="@id/itemUploaderView"
-        app:layout_constraintTop_toTopOf="@id/itemUploaderView"
-        tools:text="2 years ago • 10M views" />
+        tools:text="1:09:10" />
 
     <org.schabi.newpipe.views.AnimatedProgressBar
         android:id="@+id/itemProgressView"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
-        android:layout_height="4dp"
-        android:progressDrawable="@drawable/progress_youtube_horizontal_light_rounded"
+        android:layout_height="3dp"
+        android:progressDrawable="@drawable/progress_youtube_horizontal_light"
         app:layout_constraintBottom_toBottomOf="@id/itemThumbnailView"
         app:layout_constraintEnd_toEndOf="@+id/itemThumbnailView"
         app:layout_constraintStart_toStartOf="@+id/itemThumbnailView" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/itemUploaderAvatarView"
+        android:layout_width="@dimen/yt_feed_avatar_size"
+        android:layout_height="@dimen/yt_feed_avatar_size"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/buddy"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemThumbnailView"
+        app:shapeAppearance="@style/CircularImageView"
+        tools:ignore="ContentDescription" />
+
+    <org.schabi.newpipe.views.NewPipeTextView
+        android:id="@+id/itemVideoTitleView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="2"
+        android:textColor="@color/yt_on_surface"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/itemMoreButton"
+        app:layout_constraintStart_toEndOf="@id/itemUploaderAvatarView"
+        app:layout_constraintTop_toBottomOf="@id/itemThumbnailView"
+        app:layout_goneMarginStart="12dp"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique vitae sem vitae blandit" />
+
+    <!-- Holds "Channel · views · time"; the holder merges the details line into it -->
+    <org.schabi.newpipe.views.NewPipeTextView
+        android:id="@+id/itemUploaderView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/yt_secondary_text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/itemVideoTitleView"
+        app:layout_constraintStart_toStartOf="@id/itemVideoTitleView"
+        app:layout_constraintTop_toBottomOf="@id/itemVideoTitleView"
+        tools:text="Uploader · 10M views · 2 years ago" />
+
+    <org.schabi.newpipe.views.NewPipeTextView
+        android:id="@+id/itemAdditionalDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/itemMoreButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/yt_more_actions"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemThumbnailView"
+        app:srcCompat="@drawable/ic_more_vert"
+        app:tint="@color/yt_on_surface" />
 
     <ImageView
         android:id="@+id/itemHandle"
         android:layout_width="48dp"
         android:layout_height="36dp"
         android:contentDescription="@string/detail_drag_description"
-        android:paddingLeft="@dimen/video_item_search_image_right_margin"
         android:scaleType="center"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
-        app:layout_constraintTop_toBottomOf="@id/itemThumbnailView"
-        app:srcCompat="@drawable/ic_drag_handle"
-        tools:ignore="RtlHardcoded,RtlSymmetry" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemUploaderView"
+        app:srcCompat="@drawable/ic_drag_handle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="@color/yt_on_surface"
         app:tabMode="scrollable"
-        app:tabRippleColor="@color/white"
-        app:tabTextColor="@color/white" />
+        app:tabRippleColor="@color/yt_chip_pressed"
+        app:tabTextColor="@color/yt_secondary_text"
+            app:tabSelectedTextColor="@color/yt_on_surface" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
