@@ -21,6 +21,8 @@ internal class ShortsPagerAdapter(
 ) : RecyclerView.Adapter<ShortsPagerAdapter.PageHolder>() {
 
     interface Callbacks {
+        /** A page was (re)bound: attach its player, if one is prepared for it. */
+        fun onPageBound(holder: PageHolder, position: Int)
         fun onPageTapped(position: Int)
         fun onChannelClicked(position: Int)
         fun onCommentsClicked(position: Int)
@@ -56,6 +58,7 @@ internal class ShortsPagerAdapter(
     override fun onBindViewHolder(holder: PageHolder, position: Int) {
         holder.bind(items[position])
         infos[items[position].url]?.let(holder::bindInfo)
+        callbacks.onPageBound(holder, position)
     }
 
     override fun onViewRecycled(holder: PageHolder) {

@@ -116,10 +116,20 @@
     </style>
 
     <!-- YouTube-style UI -->
+    <!-- Page titles in the top bar -->
     <style name="YtToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- The app name next to the logo on the main page: a tight, heavy wordmark -->
+    <style name="YtToolbarBrand" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">@font/figtree_extrabold</item>
+        <item name="fontFamily">@font/figtree_extrabold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:letterSpacing">-0.03</item>
     </style>
 
     <!-- Rounded action button in the horizontal row under a video (Share, Download, ...) -->

@@ -49,8 +49,9 @@ class PlayerUiModeController(private val player: Player) {
             pendingFullscreen = true
             return
         }
+        val wasFullscreen = isFullscreen
         setFullscreen(fullscreen)
-        applyVideoOrientation()
+        applyVideoOrientation(leavingFullscreen = wasFullscreen && !fullscreen)
     }
 
     /**
@@ -184,7 +185,7 @@ class PlayerUiModeController(private val player: Player) {
      * When the user asked for it, fullscreen follows the orientation of the video instead of the
      * other way round.
      */
-    fun applyVideoOrientation() {
+    fun applyVideoOrientation(leavingFullscreen: Boolean = false) {
         if (DeviceUtils.isTv(player.context)) {
             return
         }
@@ -196,6 +197,22 @@ class PlayerUiModeController(private val player: Player) {
             // longer be dragged. Never lock the orientation here, and drop a lock that was
             // requested before the window entered multi-window (#2925).
             setOrientation(activity, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+            return
+        }
+
+        if (!DeviceUtils.isTablet(player.context)) {
+            // YouTube-style on phones: fullscreen always turns the screen to the video's
+            // orientation, whatever auto-rotate is set to. Leaving it turns the screen back
+            // upright. RotationFullscreenWatcher hands the orientation back to the system once
+            // the phone is physically held that way.
+            val phoneOrientation = when {
+                isFullscreen && isVerticalVideo -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                isFullscreen -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                leavingFullscreen && DeviceUtils.isLandscape(activity ?: player.context) ->
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            }
+            setOrientation(activity, phoneOrientation)
             return
         }
 

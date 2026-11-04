@@ -44,24 +44,17 @@ class NewVersionWorker(
      * @param apkLocationUrl Url with the new apk
      * @param versionCode    Code of new version
      */
-    private fun compareAppVersionAndShowNotification(
-        versionName: String,
-        apkLocationUrl: String?,
-        isManual: Boolean
-    ) {
-        val currentVersion = parseVersion(BuildConfig.VERSION_NAME)
-        val newVersion = parseVersion(versionName)
-        if (compareVersions(currentVersion, newVersion) >= 0) {
-            if (isManual) {
-                ContextCompat.getMainExecutor(applicationContext).execute {
-                    Toast.makeText(
-                        applicationContext, R.string.app_update_unavailable_toast,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            return
+    private fun showNoUpdateToast() {
+        ContextCompat.getMainExecutor(applicationContext).execute {
+            Toast.makeText(
+                applicationContext, R.string.app_update_unavailable_toast,
+                Toast.LENGTH_SHORT
+            ).show()
         }
+    }
+
+    /** Shows a notification that opens the download of the new APK. */
+    private fun showUpdateNotification(versionName: String, apkLocationUrl: String?) {
 
         // A pending intent to open the apk location url in the browser.
         val intent = Intent(Intent.ACTION_VIEW, apkLocationUrl?.toUri())
@@ -124,35 +117,37 @@ class NewVersionWorker(
             }
         }
 
-        // Parse the json from the response.
+        // Parse the json from the response: the builds of this fork are published as releases
+        // tagged "yt-build-<number>", the newest number wins.
         try {
-            val githubReleases = JsonParser.`array`().from(response.responseBody())
-            val includePreRelease = prefs.getBoolean(applicationContext.getString(R.string.show_prerelease_key), false)
-            var selectedRelease: JsonObject? = null
-
-            // 选择最新符合要求的版本（稳定版或包括预发布）
-            for (i in 0 until githubReleases.size) {
-                val release = githubReleases.getObject(i)
-                if (!includePreRelease && release.getBoolean("prerelease")) continue
-                if (selectedRelease == null || isNewerRelease(release, selectedRelease)) {
-                    selectedRelease = release
+            val releases = JsonParser.`array`().from(response.responseBody())
+            val isManual = inputData.getBoolean(IS_MANUAL, false)
+            var newest: JsonObject? = null
+            var newestNumber = -1
+            for (i in 0 until releases.size) {
+                val release = releases.getObject(i)
+                val number = release.getString("tag_name", "")
+                    .removePrefix(BUILD_TAG_PREFIX)
+                    .takeIf { release.getString("tag_name", "").startsWith(BUILD_TAG_PREFIX) }
+                    ?.toIntOrNull() ?: continue
+                if (number > newestNumber) {
+                    newest = release
+                    newestNumber = number
                 }
             }
 
-            selectedRelease?.let { release ->
-                val versionName = release.getString("name").removePrefix("v")
-                val apkUrl = findCompatibleApkUrl(release, Build.SUPPORTED_ABIS)
-                compareAppVersionAndShowNotification(versionName, apkUrl, inputData.getBoolean(IS_MANUAL, false))
+            if (newest == null || newestNumber <= BuildConfig.YT_BUILD_NUMBER) {
+                if (isManual) {
+                    showNoUpdateToast()
+                }
+                return
             }
+            val apkUrl = findCompatibleApkUrl(newest, Build.SUPPORTED_ABIS)
+                ?: newest.getString("html_url")
+            showUpdateNotification("build $newestNumber", apkUrl)
         } catch (e: JsonParserException) {
-            if (DEBUG) Log.w(TAG, "JSON解析错误", e)
+            if (DEBUG) Log.w(TAG, "Could not parse the releases", e)
         }
-    }
-
-    private fun isNewerRelease(newRelease: JsonObject, currentRelease: JsonObject): Boolean {
-        val newVersion = parseVersion(newRelease.getString("name").removePrefix("v"))
-        val currentVersion = parseVersion(currentRelease.getString("name").removePrefix("v"))
-        return compareVersions(newVersion, currentVersion) > 0
     }
 
     private fun findCompatibleApkUrl(release: JsonObject, abis: Array<String>): String? {
@@ -193,7 +188,9 @@ class NewVersionWorker(
         private val DEBUG = MainActivity.DEBUG
         private val TAG = NewVersionWorker::class.java.simpleName
         private val RELEASE_APK_ABIS = listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86")
-        private const val NEWPIPE_API_URL = "https://api.github.com/repositories/490984887/releases"
+        /** Releases of the fork; its CI publishes every build of the youtube-ui branch there. */
+        private const val NEWPIPE_API_URL = "https://api.github.com/repos/emniko/PipePipe/releases"
+        private const val BUILD_TAG_PREFIX = "yt-build-"
         private const val IS_MANUAL = "isManual"
 
         private fun getReleaseApkAbi(name: String): String? {

@@ -282,7 +282,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
     override fun onResume() {
         super.onResume()
         if (rotationWatcher == null) {
-            rotationWatcher = RotationFullscreenWatcher(requireContext(), { player },
+            rotationWatcher = RotationFullscreenWatcher(requireActivity(), { player },
                 { hosts.sheetState })
         }
         rotationWatcher?.start()

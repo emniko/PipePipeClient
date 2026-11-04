@@ -833,8 +833,10 @@ public class MainActivity extends AppCompatActivity {
             }
             toolbarLayoutBinding.toolbar.setNavigationIcon(null);
             toolbarLayoutBinding.toolbar.setLogo(R.drawable.yt_app_logo);
+            toolbarLayoutBinding.toolbar.setTitleTextAppearance(this, R.style.YtToolbarBrand);
         } else {
             toolbarLayoutBinding.toolbar.setLogo(null);
+            toolbarLayoutBinding.toolbar.setTitleTextAppearance(this, R.style.YtToolbarTitle);
             mainBinding.getRoot().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbarLayoutBinding.toolbar.setNavigationOnClickListener(v -> onHomeButtonPressed());
