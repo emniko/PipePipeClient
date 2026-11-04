@@ -31,6 +31,7 @@ import org.schabi.newpipe.info_list.holder.PlaylistInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.PlaylistMiniInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.StaffInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.StreamCardInfoItemHolder;
+import org.schabi.newpipe.info_list.holder.StreamShortsInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.StreamGridInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.StreamInfoItemHolder;
 import org.schabi.newpipe.info_list.holder.StreamMiniInfoItemHolder;
@@ -78,6 +79,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int STREAM_HOLDER_TYPE = 0x101;
     private static final int GRID_STREAM_HOLDER_TYPE = 0x102;
     private static final int CARD_STREAM_HOLDER_TYPE = 0x103;
+    private static final int SHORTS_STREAM_HOLDER_TYPE = 0x104;
     private static final int MINI_CHANNEL_HOLDER_TYPE = 0x200;
     private static final int CHANNEL_HOLDER_TYPE = 0x201;
     private static final int GRID_CHANNEL_HOLDER_TYPE = 0x202;
@@ -377,7 +379,10 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         switch (item.getInfoType()) {
             case STREAM:
-                if (itemMode == ItemViewMode.CARD) {
+                if (itemMode == ItemViewMode.CARD
+                        && ((StreamInfoItem) item).isShortFormContent()) {
+                    return SHORTS_STREAM_HOLDER_TYPE;
+                } else if (itemMode == ItemViewMode.CARD) {
                     return CARD_STREAM_HOLDER_TYPE;
                 } else if (isGrid(itemMode)) {
                     return GRID_STREAM_HOLDER_TYPE;
@@ -439,6 +444,8 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return new StreamGridInfoItemHolder(infoItemBuilder, parent);
             case CARD_STREAM_HOLDER_TYPE:
                 return new StreamCardInfoItemHolder(infoItemBuilder, parent);
+            case SHORTS_STREAM_HOLDER_TYPE:
+                return new StreamShortsInfoItemHolder(infoItemBuilder, parent);
             case MINI_CHANNEL_HOLDER_TYPE:
                 return new ChannelMiniInfoItemHolder(infoItemBuilder, parent);
             case CHANNEL_HOLDER_TYPE:
@@ -511,6 +518,23 @@ public class InfoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public int getSpanSize(final int position) {
                 final int type = getItemViewType(position);
                 return type == HEADER_TYPE || type == FOOTER_TYPE ? spanCount : 1;
+            }
+        };
+    }
+
+    /**
+     * Span sizes for the YouTube-style card list: every row is full width except Shorts, which
+     * take half of it so that two of them sit side by side.
+     *
+     * @param spanCount the span count of the grid, 2
+     * @return the lookup
+     */
+    public GridLayoutManager.SpanSizeLookup getCardSpanSizeLookup(final int spanCount) {
+        return new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(final int position) {
+                return getItemViewType(position) == SHORTS_STREAM_HOLDER_TYPE
+                        ? 1 : spanCount;
             }
         };
     }

@@ -25,7 +25,6 @@ import org.schabi.newpipe.error.UserAction
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.fragments.BackPressable
 import org.schabi.newpipe.fragments.BaseStateFragment
-import org.schabi.newpipe.fragments.detail.tabs.DetailTab
 import org.schabi.newpipe.fragments.detail.tabs.DetailTabsController
 import org.schabi.newpipe.fragments.list.sponsorblock.SponsorBlockFragment
 import org.schabi.newpipe.fragments.list.sponsorblock.SponsorBlockFragmentListener
@@ -113,6 +112,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
     private var sheet: MiniPlayerSheetController? = null
 
     private val handler = Handler(Looper.getMainLooper())
+    private var rotationWatcher: RotationFullscreenWatcher? = null
     private val detailEventListener = DetailPlayerEvents.Listener(::onDetailEvent)
     private val rotationObserver = object : ContentObserver(handler) {
         override fun onChange(selfChange: Boolean) {
@@ -223,12 +223,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         actions = DetailActions(this, binding, header, hosts).also { it.setup() }
         tabs = DetailTabsController(this, binding.viewPager, binding.tabLayout,
             binding.relatedItemsLayout, vm.tabsState, hosts)
-        // YouTube-style comments teaser under the actions: jumps to the comments tab
-        binding.detailContentRootLayout.detailCommentsTeaser.setOnClickListener {
-            if (tabs?.select(DetailTab.COMMENTS) == true) {
-                binding.appBarLayout.setExpanded(false, true)
-            }
-        }
         playerView.updateStickyPlayerMode()
         binding.detailThumbnailRootLayout.root.requestFocus()
         vm.results.observe(viewLifecycleOwner) { it.consume()?.let(::onLoadResult) }
@@ -287,6 +281,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
     override fun onResume() {
         super.onResume()
+        if (rotationWatcher == null) {
+            rotationWatcher = RotationFullscreenWatcher(requireContext(), { player },
+                { hosts.sheetState })
+        }
+        rotationWatcher?.start()
         DetailPlayerEvents.detailResumed()
         playerView?.setupBrightness()
         tabs?.onResume()
@@ -295,6 +294,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
     override fun onPause() {
         super.onPause()
+        rotationWatcher?.stop()
         playerView?.restoreDefaultBrightness()
         tabs?.saveSelectedTab()
     }
@@ -448,8 +448,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
             tabs?.showInfo(info)
         }
         header?.showInfo(info, vm.playQueue)
-        binding.detailContentRootLayout.detailCommentsTeaser.visibility =
-            if (tabs?.has(DetailTab.COMMENTS) == true) View.VISIBLE else View.GONE
         if (player?.isStopped != false) {
             sheet?.updateOverlayData(info.name, info.uploaderName, info.thumbnailUrl)
         }

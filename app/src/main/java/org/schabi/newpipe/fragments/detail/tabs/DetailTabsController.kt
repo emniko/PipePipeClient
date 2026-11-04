@@ -183,19 +183,6 @@ class DetailTabsController(
         updateTabLayoutVisibility()
     }
 
-    /** Whether the page currently has [tab]. */
-    fun has(tab: DetailTab): Boolean = adapter.positionOf(tab) != -1
-
-    /** Switches to [tab] like a tap on it would; returns false if the page has no such tab. */
-    fun select(tab: DetailTab): Boolean {
-        val position = adapter.positionOf(tab)
-        if (position == -1) {
-            return false
-        }
-        pager.setCurrentItem(position, true)
-        return true
-    }
-
     fun showError() {
         relatedPanel?.visibility = View.INVISIBLE
         pager.visibility = View.GONE

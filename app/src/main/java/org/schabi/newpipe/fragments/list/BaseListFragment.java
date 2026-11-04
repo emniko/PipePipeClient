@@ -34,12 +34,14 @@ import org.schabi.newpipe.extractor.channel.ChannelInfoItem;
 import org.schabi.newpipe.extractor.comments.CommentsInfoItem;
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
+import org.schabi.newpipe.shorts.ShortsActivity;
 import org.schabi.newpipe.fragments.BaseStateFragment;
 import org.schabi.newpipe.fragments.OnScrollBelowItemsListener;
 import org.schabi.newpipe.info_list.ItemViewMode;
 import org.schabi.newpipe.info_list.dialog.InfoItemDialog;
 import org.schabi.newpipe.info_list.InfoListAdapter;
 import org.schabi.newpipe.settings.SettingsActivity;
+import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.OnClickGesture;
 import org.schabi.newpipe.util.StateSaver;
@@ -408,6 +410,17 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I>
         return new SuperScrollLayoutManager(activity);
     }
 
+    /**
+     * The YouTube-style card list: one card per row, but Shorts two per row.
+     *
+     * @return a two column grid where everything else spans both columns
+     */
+    protected RecyclerView.LayoutManager getCardLayoutManager() {
+        final GridLayoutManager lm = new GridLayoutManager(activity, 2);
+        lm.setSpanSizeLookup(infoListAdapter.getCardSpanSizeLookup(2));
+        return lm;
+    }
+
     protected RecyclerView.LayoutManager getGridLayoutManager() {
         final int spanCount = getGridSpanCountStreams(activity);
         final GridLayoutManager lm = new GridLayoutManager(activity, spanCount);
@@ -420,8 +433,13 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I>
      */
     private void refreshItemViewMode() {
         final ItemViewMode itemViewMode = getItemViewMode();
-        itemsList.setLayoutManager((isGrid(itemViewMode))
-                ? getGridLayoutManager() : getListLayoutManager());
+        if (isGrid(itemViewMode)) {
+            itemsList.setLayoutManager(getGridLayoutManager());
+        } else if (itemViewMode == ItemViewMode.CARD && !DeviceUtils.isTv(activity)) {
+            itemsList.setLayoutManager(getCardLayoutManager());
+        } else {
+            itemsList.setLayoutManager(getListLayoutManager());
+        }
         infoListAdapter.setItemViewMode(itemViewMode);
         infoListAdapter.notifyDataSetChanged();
     }
@@ -659,9 +677,37 @@ public abstract class BaseListFragment<I, N> extends BaseStateFragment<I>
 
     private void onStreamSelected(final StreamInfoItem selectedItem) {
         onItemSelected(selectedItem);
+        if (selectedItem.isShortFormContent() && openInShortsPlayer(selectedItem)) {
+            return;
+        }
         NavigationHelper.openVideoDetailFragment(requireContext(), getFM(),
                 selectedItem.getServiceId(), selectedItem.getUrl(), selectedItem.getName(),
                 null, false);
+    }
+
+    /**
+     * Opens a Short like YouTube does: full screen, swiping through the other Shorts of this
+     * list.
+     *
+     * @param selectedItem the tapped Short
+     * @return whether the Shorts player was opened
+     */
+    private boolean openInShortsPlayer(final StreamInfoItem selectedItem) {
+        final List<StreamInfoItem> shorts = new ArrayList<>();
+        int startIndex = -1;
+        for (final InfoItem item : infoListAdapter.getItemsList()) {
+            if (item instanceof StreamInfoItem && ((StreamInfoItem) item).isShortFormContent()) {
+                if (item == selectedItem) {
+                    startIndex = shorts.size();
+                }
+                shorts.add((StreamInfoItem) item);
+            }
+        }
+        if (startIndex < 0) {
+            return false;
+        }
+        ShortsActivity.open(requireContext(), shorts, startIndex);
+        return true;
     }
 
     protected void onScrollToBottom() {

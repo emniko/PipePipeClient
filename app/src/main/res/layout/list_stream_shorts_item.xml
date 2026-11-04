@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube-style Shorts tile: tall 9:16 thumbnail with the title on it; two tiles per row -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/itemThumbnailView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder_thumbnail_video"
+            app:layout_constraintDimensionRatio="9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/RoundedThumbnailImageView"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/itemScrim"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/yt_shorts_scrim"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@id/itemThumbnailView"
+            app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toStartOf="@id/itemThumbnailView"
+            app:shapeAppearance="@style/RoundedThumbnailImageView"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/itemMoreButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/yt_more_actions"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
+            app:layout_constraintTop_toTopOf="@id/itemThumbnailView"
+            app:srcCompat="@drawable/ic_more_vert"
+            app:tint="@android:color/white" />
+
+        <org.schabi.newpipe.views.NewPipeTextView
+            android:id="@+id/itemVideoTitleView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="2"
+            android:shadowColor="#80000000"
+            android:shadowRadius="4"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/itemAdditionalDetails"
+            app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
+            app:layout_constraintStart_toStartOf="@id/itemThumbnailView"
+            tools:text="A very short video with a title on two lines" />
+
+        <org.schabi.newpipe.views.NewPipeTextView
+            android:id="@+id/itemAdditionalDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:maxLines="1"
+            android:shadowColor="#80000000"
+            android:shadowRadius="4"
+            android:textColor="#E6FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/itemThumbnailView"
+            app:layout_constraintEnd_toEndOf="@id/itemThumbnailView"
+            app:layout_constraintStart_toStartOf="@id/itemThumbnailView"
+            tools:text="1.2M views" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

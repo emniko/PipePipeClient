@@ -1315,6 +1315,11 @@ public final class Player {
         uiModeController.changeFullscreen(fullscreen);
     }
 
+    /** Whether the current video is taller than it is wide, e.g. a YouTube Short. */
+    public boolean isVerticalVideo() {
+        return uiModeController.isVerticalVideo();
+    }
+
     /**
      * Leaves the fullscreen layout without requesting another screen orientation, so the screen
      * stays as the user has it (e.g. landscape while minimizing by swiping down).

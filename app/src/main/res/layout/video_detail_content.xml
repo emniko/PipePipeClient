@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- YouTube-style watch page header: title, views line, channel row with Subscribe pill,
-     a horizontally scrolling row of action pills and a comments teaser. -->
+     a horizontally scrolling row of action pills. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -375,44 +375,6 @@
                 </LinearLayout>
             </LinearLayout>
         </HorizontalScrollView>
-
-        <!-- COMMENTS TEASER -->
-        <LinearLayout
-            android:id="@+id/detail_comments_teaser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/yt_card_background"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/focused_selector"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <org.schabi.newpipe.views.NewPipeTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/yt_comments_teaser_title"
-                android:textColor="@color/yt_on_surface"
-                android:textSize="14sp" />
-
-            <org.schabi.newpipe.views.NewPipeTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:text="@string/yt_comments_teaser_hint"
-                android:textColor="@color/yt_secondary_text"
-                android:textSize="13sp"
-                app:drawableStartCompat="@drawable/ic_comment"
-                app:drawableTint="@color/yt_secondary_text" />
-        </LinearLayout>
 
         <View
             android:id="@+id/detail_meta_info_separator"

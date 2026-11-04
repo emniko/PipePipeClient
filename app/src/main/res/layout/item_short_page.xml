@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One full-screen Short: video, channel + title at the bottom left, actions on the right -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/short_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/short_poster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/short_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:resize_mode="zoom"
+        app:show_buffering="never"
+        app:shutter_background_color="@android:color/transparent"
+        app:surface_type="texture_view"
+        app:use_controller="false" />
+
+    <ProgressBar
+        android:id="@+id/short_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/short_play_icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:alpha="0.8"
+        android:src="@drawable/ic_play_arrow"
+        android:visibility="gone"
+        app:tint="@android:color/white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/short_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="24dp"
+        android:text="@string/yt_short_unavailable"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/yt_shorts_scrim" />
+
+    <!-- actions -->
+    <LinearLayout
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/short_like"
+            style="@style/YtShortsAction"
+            android:text="@string/yt_like"
+            app:drawableTopCompat="@drawable/ic_thumb_up" />
+
+        <TextView
+            android:id="@+id/short_dislike"
+            style="@style/YtShortsAction"
+            android:text="@string/yt_dislike"
+            app:drawableTopCompat="@drawable/ic_thumb_down" />
+
+        <TextView
+            android:id="@+id/short_comments"
+            style="@style/YtShortsAction"
+            android:text="@string/yt_comments"
+            app:drawableTopCompat="@drawable/ic_comment" />
+
+        <TextView
+            android:id="@+id/short_share"
+            style="@style/YtShortsAction"
+            android:text="@string/share"
+            app:drawableTopCompat="@drawable/ic_share" />
+    </LinearLayout>
+
+    <!-- channel and title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="28dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/short_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/short_avatar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/buddy"
+                app:shapeAppearance="@style/CircularImageView"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/short_channel_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:shadowColor="#80000000"
+                android:shadowRadius="4"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                tools:text="\@channel" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/short_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:shadowColor="#80000000"
+            android:shadowRadius="4"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            tools:text="A short video about something interesting #shorts" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/short_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom"
+        android:max="1000"
+        android:progressDrawable="@drawable/progress_youtube_horizontal_dark" />
+</FrameLayout>
