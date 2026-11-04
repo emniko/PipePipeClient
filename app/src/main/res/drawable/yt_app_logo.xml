@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Small logo for the main top bar: PipePipe's own TV glyph on a red rounded tile -->
+<!-- Small logo for the main top bar: PipePipe's own TV glyph on a red rounded tile,
+     followed by a little space before the app name -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:width="30dp"
-        android:height="21dp">
+        android:height="21dp"
+        android:right="6dp">
         <shape android:shape="rectangle">
             <corners android:radius="6dp" />
             <solid android:color="@color/yt_red" />
@@ -13,5 +15,6 @@
         android:width="15dp"
         android:height="15dp"
         android:drawable="@drawable/ic_pipepipe"
-        android:gravity="center" />
+        android:gravity="center_vertical|start"
+        android:start="7.5dp" />
 </layer-list>
