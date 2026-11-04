@@ -15,7 +15,7 @@ import org.schabi.newpipe.util.Localization
 import org.schabi.newpipe.util.PicassoHelper
 
 /** One full-screen page per Short. The player is moved between pages by [ShortsActivity]. */
-internal class ShortsPagerAdapter(
+class ShortsPagerAdapter(
     initialItems: List<StreamInfoItem>,
     private val callbacks: Callbacks,
 ) : RecyclerView.Adapter<ShortsPagerAdapter.PageHolder>() {
