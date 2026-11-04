@@ -431,7 +431,10 @@ class FeedFragment : BaseStateFragment<FeedState>(), BackPressable {
         super.onCreateOptionsMenu(menu, inflater)
 
         activity.supportActionBar?.setDisplayShowTitleEnabled(true)
-        if (groupName == ""){
+        // as a main tab, the main page owns the title (the app name, like YouTube)
+        if (useAsFrontPage) {
+            // keep the title set by the main page
+        } else if (groupName == ""){
             activity.supportActionBar?.setTitle(R.string.fragment_feed_title)
         } else {
             activity.supportActionBar?.title = groupName

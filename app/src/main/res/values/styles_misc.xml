@@ -77,7 +77,7 @@
         <item name="android:textColorPrimary">@color/yt_on_surface</item>
         <item name="android:textColorSecondary">@color/yt_secondary_text</item>
         <item name="colorControlNormal">@color/yt_on_surface</item>
-        <item name="tint">@color/yt_on_surface</item>
+        <!-- no theme-wide "tint": it would also tint the colored logo -->
         <item name="iconTint">@color/yt_on_surface</item>
         <item name="toolbarSearchColor">@color/yt_on_surface</item>
     </style>

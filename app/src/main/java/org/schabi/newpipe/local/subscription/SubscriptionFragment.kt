@@ -137,7 +137,10 @@ class SubscriptionFragment : BaseStateFragment<SubscriptionState>() {
         super.onCreateOptionsMenu(menu, inflater)
 
         activity.supportActionBar?.setDisplayShowTitleEnabled(true)
-        activity.supportActionBar?.setTitle(R.string.tab_subscriptions)
+        // as a main tab, the main page owns the title (the app name, like YouTube)
+        if (!useAsFrontPage) {
+            activity.supportActionBar?.setTitle(R.string.tab_subscriptions)
+        }
     }
 
     private fun setupBroadcastReceiver() {
